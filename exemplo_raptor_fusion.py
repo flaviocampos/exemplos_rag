@@ -17,12 +17,13 @@ load_dotenv()
 
 # 1. Carrega todos os documentos .txt da pasta "documentos"
 def carregar_documentos(caminho_pasta):
-    documentos = []
+    _documentos = []
     for nome_arquivo in os.listdir(caminho_pasta):
         if nome_arquivo.endswith(".txt"):
             loader = TextLoader(os.path.join(caminho_pasta, nome_arquivo), encoding="utf-8")
-            documentos.extend(loader.load())
-    return documentos
+            _documentos.extend(loader.load())
+    return _documentos
+
 
 # 2. Carregar e dividir os documentos em chunks
 documentos = carregar_documentos("docs")
@@ -52,9 +53,10 @@ retriever_fusion_raptor = ContextualCompressionRetriever(
 )
 
 # 7. Construir a chain final para responder perguntas
+#stuff,
 qa_chain = RetrievalQA.from_chain_type(
     llm=llm,
-    chain_type="stuff",
+    chain_type="map_reduce",
     retriever=retriever_fusion_raptor,
     return_source_documents=True
 )
